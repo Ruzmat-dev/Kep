@@ -10,6 +10,7 @@ const Home = () => {
     const [term, setTerm] = useState<string | undefined>()
     const [difficulty, setDifficulty] = useState<string | undefined>()
     const [statusChecker, setStatusChecker] = useState<boolean>()
+    const [loading, setLoading] = useState<boolean>(false)
     const [params, setParams] = useState<{
         page: number;
         pageSize: number;
@@ -24,12 +25,13 @@ const Home = () => {
         has_checker: statusChecker
     });
     const fetchData = async () => {
+        setLoading(true)
         try {
             const result = await getProblems(params);
             setData(result);
-            console.log(params);
-
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.error("Error fetching data:", error);
         }
     };
@@ -113,7 +115,7 @@ const Home = () => {
 
             </Box>
 
-            {data && <Table data={data} params={params} setParams={setParams} />}
+            {data && <Table data={data} params={params} setParams={setParams} loading={loading} />}
         </div>
     );
 };

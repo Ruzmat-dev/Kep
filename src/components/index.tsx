@@ -5,7 +5,8 @@ import CustomChip from '../../src/@core/components/mui/chip'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
-const Table = ({ data, params, setParams }: {
+
+const Table = ({ data, params, setParams, loading }: {
     data: TResponse<TProblemsTypes>,
     params: {
         page: number;
@@ -14,9 +15,9 @@ const Table = ({ data, params, setParams }: {
     setParams: React.Dispatch<React.SetStateAction<{
         page: number;
         pageSize: number;
-    }>>;
+    }>>,
+    loading: boolean
 }) => {
-
 
     const columns: GridColDef[] = [
         {
@@ -26,20 +27,20 @@ const Table = ({ data, params, setParams }: {
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
         {
             field: 'title',
-            headerName: 'title',
+            headerName: 'Title',
             width: 350,
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
         {
             field: 'tags',
-            headerName: 'tags',
+            headerName: 'Tags',
             width: 400,
             renderCell: params => {
                 if (params.value[0]) {
@@ -58,7 +59,7 @@ const Table = ({ data, params, setParams }: {
         },
         {
             field: 'difficultyTitle',
-            headerName: 'difficulty',
+            headerName: 'Difficulty',
             width: 150,
             filterable: false,
             renderCell: (params) => {
@@ -82,7 +83,7 @@ const Table = ({ data, params, setParams }: {
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
         {
             field: 'dislikesCount',
@@ -96,7 +97,7 @@ const Table = ({ data, params, setParams }: {
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
         {
             field: 'solved',
@@ -109,7 +110,7 @@ const Table = ({ data, params, setParams }: {
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
         {
             field: 'notSolved',
@@ -122,14 +123,10 @@ const Table = ({ data, params, setParams }: {
             filterable: false,
             editable: false,
             disableColumnMenu: true,
-            sortable: false,
+            sortable: true,
         },
 
     ]
-
-
-
-    const isLoading: boolean = false
 
     return (
         <Grid container spacing={6}>
@@ -137,8 +134,7 @@ const Table = ({ data, params, setParams }: {
                 <Card sx={{ alignItems: "center", mt: "25px" }}>
                     <div style={{ height: '90vh', width: '100%' }}>
                         <DataGrid
-
-                            loading={isLoading}
+                            loading={loading}
                             rows={data ? data.data : []}
                             slots={{
                                 loadingOverlay: () => (
