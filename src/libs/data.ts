@@ -21,7 +21,6 @@ export const getProblems = async ({
         },
       }
     );
-    console.log(res.data);
 
     return res.data;
   } catch (error) {

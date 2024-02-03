@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Table from "../components";
+import Table from "../components/Table";
 import { getProblems } from "../libs/data";
 import { TProblemsTypes, TResponse } from "../types/type";
 import { Autocomplete, Box, TextField } from "@mui/material";
@@ -38,49 +38,34 @@ const Home = () => {
 
     const handleSearch = async (term: string) => {
         setTerm(term)
-        try {
-            setParams({
-                page: 1,
-                pageSize: params.pageSize,
-                title: term,
-                difficulty: difficulty
-            });
-
-        } catch (error) {
-            console.error("Error searching data:", error);
-        }
+        setParams({
+            page: 1,
+            pageSize: params.pageSize,
+            title: term,
+            difficulty: difficulty
+        })
     };
 
     const handleChangeOption = async (value: { id: string; title: string } | null) => {
         setDifficulty(value ? value.id : undefined)
-        try {
-            setParams({
-                page: 1,
-                pageSize: params.pageSize,
-                title: term,
-                difficulty: value ? value.id : undefined,
-            });
-
-        } catch (error) {
-            console.error("Error searching data:", error);
-        }
+        setParams({
+            page: 1,
+            pageSize: params.pageSize,
+            title: term,
+            difficulty: value ? value.id : undefined,
+        })
     }
 
     const handleChangeChecker = async (value: { title: string, status: boolean } | null) => {
-        try {
-            setStatusChecker(value?.status)
-            setParams({
-                page: 1,
-                pageSize: params.pageSize,
-                title: term,
-                difficulty: difficulty,
-                has_checker: value?.status
-            });
 
-        } catch (error) {
-            console.error("Error searching data:", error);
-        }
-
+        setStatusChecker(value?.status)
+        setParams({
+            page: 1,
+            pageSize: params.pageSize,
+            title: term,
+            difficulty: difficulty,
+            has_checker: value?.status
+        })
     }
 
     useEffect(() => {
@@ -88,7 +73,7 @@ const Home = () => {
     }, [params]);
 
     return (
-        <div>
+        <Box sx={{ px: 4, py: 1 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <TextField id="outlined-basic" label="Search" variant="outlined" onChange={(e) => handleSearch(e.target.value)} />
 
@@ -112,11 +97,10 @@ const Home = () => {
                     renderInput={(params) => <TextField {...params} label='Has checker' />}
                 />
 
-
             </Box>
 
             {data && <Table data={data} params={params} setParams={setParams} loading={loading} />}
-        </div>
+        </Box>
     );
 };
 

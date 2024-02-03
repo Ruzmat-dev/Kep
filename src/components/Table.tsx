@@ -1,7 +1,7 @@
 import { Badge, Box, Card, CircularProgress, Grid } from '@mui/material';
 import { DataGrid, GridOverlay, GridColDef } from '@mui/x-data-grid'
 import { TProblemsTypes, TResponse } from '../types/type';
-import CustomChip from '../../src/@core/components/mui/chip'
+import CustomChip from '../@core/components/mui/chip'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
@@ -132,7 +132,7 @@ const Table = ({ data, params, setParams, loading }: {
         <Grid container spacing={6}>
             <Grid item xs={12}>
                 <Card sx={{ alignItems: "center", mt: "25px" }}>
-                    <div style={{ height: '90vh', width: '100%' }}>
+                    <div style={{ height: '80vh', width: '100%' }}>
                         <DataGrid
                             loading={loading}
                             rows={data ? data.data : []}
