@@ -4,19 +4,32 @@ import { TProblemsTypes, TResponse } from '../types/type';
 import CustomChip from '../../src/@core/components/mui/chip'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import { useEffect, useState } from 'react';
+import { getProblems } from '../libs/data';
 
-const Table = ({ data, params, setParams }: {
-    data: TResponse<TProblemsTypes>,
-    params: {
+const Table = () => {
+    const [params, setParams] = useState<{
         page: number;
         pageSize: number;
-    },
-    setParams: React.Dispatch<React.SetStateAction<{
-        page: number;
-        pageSize: number;
-    }>>;
-}) => {
-    console.log(data);
+    }>({
+        page: 1,
+        pageSize: 20,
+    });
+
+    const [data, setData] = useState<TResponse<TProblemsTypes>>();
+
+    const fetchData = async () => {
+        try {
+            const result = await getProblems(params);
+            result && setData(result);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [params]);
 
     const columns: GridColDef[] = [
         {
@@ -54,7 +67,7 @@ const Table = ({ data, params, setParams }: {
         {
             field: 'tags',
             headerName: 'tags',
-            width: 300,
+            width: 400,
             renderCell: params => {
                 if (params.value[0]) {
                     return params.value.map((e: { id: number, name: string }, index: number) => {
@@ -158,16 +171,20 @@ const Table = ({ data, params, setParams }: {
                             }}
                             density='compact'
                             columns={columns}
-                            rowCount={data ? data.count : 0}
+                            rowCount={data ? data.total : 0}
                             initialState={{
                                 pagination: {
                                     paginationModel: { page: params.page - 1, pageSize: params.pageSize }
                                 }
                             }}
-                            pageSizeOptions={[5, 10, 25, 50]}
+
+                            pageSizeOptions={[20]}
                             paginationMode='server'
                             paginationModel={{ page: params.page - 1, pageSize: params.pageSize }}
-                            onPaginationModelChange={e => setParams({ ...params, page: e.page + 1, pageSize: e.pageSize })}
+                            onPaginationModelChange={(e) => {
+                                console.log('Pagination Model Change:', e);
+                                setParams({ ...params, page: e.page + 1, pageSize: e.pageSize });
+                            }}
                         />
                     </div>
                 </Card>
