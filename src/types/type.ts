@@ -1,6 +1,8 @@
 export type TGetParams = {
   page?: number;
   pageSize?: number;
+  title?: string;
+  difficulty?: string;
 };
 
 export type TResponse<T> = {
@@ -13,6 +15,7 @@ export type TResponse<T> = {
 };
 
 export type TProblemsTypes = {
+  length: number;
   id: number;
   title: string;
   difficulty: number;

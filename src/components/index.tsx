@@ -4,32 +4,19 @@ import { TProblemsTypes, TResponse } from '../types/type';
 import CustomChip from '../../src/@core/components/mui/chip'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import { useEffect, useState } from 'react';
-import { getProblems } from '../libs/data';
 
-const Table = () => {
-    const [params, setParams] = useState<{
+const Table = ({ data, params, setParams }: {
+    data: TResponse<TProblemsTypes>,
+    params: {
         page: number;
         pageSize: number;
-    }>({
-        page: 1,
-        pageSize: 20,
-    });
+    },
+    setParams: React.Dispatch<React.SetStateAction<{
+        page: number;
+        pageSize: number;
+    }>>;
+}) => {
 
-    const [data, setData] = useState<TResponse<TProblemsTypes>>();
-
-    const fetchData = async () => {
-        try {
-            const result = await getProblems(params);
-            result && setData(result);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [params]);
 
     const columns: GridColDef[] = [
         {
@@ -71,7 +58,6 @@ const Table = () => {
             renderCell: params => {
                 if (params.value[0]) {
                     return params.value.map((e: { id: number, name: string }, index: number) => {
-                        // Add your condition to change color dynamically
                         const color = e.name == 'Google' ? 'error' : e.name == 'IQ' ? 'success' : e.name == 'Math' ? 'info' : 'primary';
                         return <CustomChip label={e.name} color={color} key={index} sx={{ ml: 0.3 }} />;
                     });
@@ -143,6 +129,8 @@ const Table = () => {
 
     ]
 
+
+
     const isLoading: boolean = false
 
     return (
@@ -151,6 +139,7 @@ const Table = () => {
                 <Card sx={{ alignItems: "center", mt: "25px" }}>
                     <div style={{ height: '90vh', width: '100%' }}>
                         <DataGrid
+
                             loading={isLoading}
                             rows={data ? data.data : []}
                             slots={{
@@ -158,7 +147,7 @@ const Table = () => {
                                     <GridOverlay>
                                         <Box>
                                             <CircularProgress />
-                                            {''}
+
                                         </Box>
                                     </GridOverlay>
                                 ),
