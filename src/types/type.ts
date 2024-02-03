@@ -3,6 +3,7 @@ export type TGetParams = {
   pageSize?: number;
   title?: string;
   difficulty?: string;
+  has_checker?: boolean;
 };
 
 export type TResponse<T> = {

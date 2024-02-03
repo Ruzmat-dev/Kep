@@ -5,24 +5,29 @@ import { TProblemsTypes, TResponse } from "../types/type";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
 const Home = () => {
-    const [params, setParams] = useState<{
-        page: number;
-        pageSize: number;
-        title?: string;
-        difficulty?: string
-    }>({
-        page: 1,
-        pageSize: 20,
-    });
 
     const [data, setData] = useState<TResponse<TProblemsTypes>>();
     const [term, setTerm] = useState<string | undefined>()
     const [difficulty, setDifficulty] = useState<string | undefined>()
+    const [statusChecker, setStatusChecker] = useState<boolean>()
+    const [params, setParams] = useState<{
+        page: number;
+        pageSize: number;
+        title?: string;
+        difficulty?: string;
+        has_checker?: boolean
+    }>({
+        page: 1,
+        pageSize: 20,
+        title: term,
+        difficulty: difficulty,
+        has_checker: statusChecker
+    });
     const fetchData = async () => {
         try {
             const result = await getProblems(params);
-            result && setData(result);
-            console.log(result);
+            setData(result);
+            console.log(params);
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -39,7 +44,6 @@ const Home = () => {
                 difficulty: difficulty
             });
 
-            await fetchData();
         } catch (error) {
             console.error("Error searching data:", error);
         }
@@ -55,10 +59,26 @@ const Home = () => {
                 difficulty: value ? value.id : undefined,
             });
 
-            await fetchData();
         } catch (error) {
             console.error("Error searching data:", error);
         }
+    }
+
+    const handleChangeChecker = async (value: { title: string, status: boolean } | null) => {
+        try {
+            setStatusChecker(value?.status)
+            setParams({
+                page: 1,
+                pageSize: params.pageSize,
+                title: term,
+                difficulty: difficulty,
+                has_checker: value?.status
+            });
+
+        } catch (error) {
+            console.error("Error searching data:", error);
+        }
+
     }
 
     useEffect(() => {
@@ -79,6 +99,18 @@ const Home = () => {
                     onChange={(_, value) => handleChangeOption(value)}
                     renderInput={(params) => <TextField {...params} label='search by difficulty' />}
                 />
+
+                <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={hasChecker}
+                    sx={{ width: 300 }}
+                    getOptionLabel={(option) => option.title}
+                    onChange={(_, value) => handleChangeChecker(value)}
+                    renderInput={(params) => <TextField {...params} label='Has checker' />}
+                />
+
+
             </Box>
 
             {data && <Table data={data} params={params} setParams={setParams} />}
@@ -114,3 +146,14 @@ const options: { id: string, title: string }[] = [
         title: 'Hard'
     },
 ];
+
+const hasChecker: { title: string, status: boolean }[] = [
+    {
+        title: 'No',
+        status: false
+    },
+    {
+        title: 'Yes',
+        status: true
+    }
+]

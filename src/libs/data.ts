@@ -6,6 +6,7 @@ export const getProblems = async ({
   pageSize,
   title,
   difficulty,
+  has_checker,
 }: TGetParams) => {
   try {
     const res = await publicAxios.get<TResponse<TProblemsTypes>>(
@@ -14,6 +15,7 @@ export const getProblems = async ({
         params: {
           title,
           difficulty,
+          has_checker,
           page,
           pageSize,
         },

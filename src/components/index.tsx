@@ -31,22 +31,8 @@ const Table = ({ data, params, setParams }: {
         {
             field: 'title',
             headerName: 'title',
-            width: 400,
+            width: 350,
             filterable: false,
-            editable: false,
-            disableColumnMenu: true,
-            sortable: false,
-        },
-        {
-            field: 'difficultyTitle',
-            headerName: 'difficulty',
-            width: 150,
-            filterable: false,
-            renderCell: (params) => {
-                const color = params.value === 'Basic' ? 'primary' : params.value === 'Medium' ? 'info' : params.value === 'Hard' ? 'warning' : params.value === 'Advanced' ? 'success' : 'error'
-                return <CustomChip label={params.value} color={color} />
-            },
-
             editable: false,
             disableColumnMenu: true,
             sortable: false,
@@ -65,9 +51,21 @@ const Table = ({ data, params, setParams }: {
                     return <CustomChip label='not tags' skin='light' color='error' sx={{ ml: 0.3 }} />;
                 }
             },
-
-
             filterable: false,
+            editable: false,
+            disableColumnMenu: true,
+            sortable: false,
+        },
+        {
+            field: 'difficultyTitle',
+            headerName: 'difficulty',
+            width: 150,
+            filterable: false,
+            renderCell: (params) => {
+                const color = params.value === 'Basic' ? 'primary' : params.value === 'Medium' ? 'info' : params.value === 'Hard' ? 'warning' : params.value === 'Advanced' ? 'success' : 'error'
+                return <CustomChip label={params.value} color={color} />
+            },
+
             editable: false,
             disableColumnMenu: true,
             sortable: false,
